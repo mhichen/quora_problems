@@ -172,7 +172,7 @@ int pop(Node* &headref)
   int val;
   Node* toPop = headref;
 
-  assert(toPop != nullptr)
+  assert(toPop != nullptr);
   
   headref = headref -> next;
   
@@ -234,6 +234,134 @@ void sortedInsert(Node* &headref, Node* newNode)
   
   return;
 }
+
+// Given list A and B, append B to end of A
+void append(Node* &headrefA, Node* &headrefB)
+{
+  // if A empty, reset reference to B
+  if (headrefA == nullptr)
+  {
+    headrefA = headrefB;
+    headrefB = nullptr;
+    return;
+  }
+
+  // if B empty, do nothing
+  if (headrefB == nullptr)
+  {
+    return;
+  }
+
+  // iterate over A till reach end and then attach B
+  Node* curr = headrefA;
+  while(curr->next != nullptr)
+  {
+    curr = curr->next;
+  }
+
+  curr->next = headrefB;
+  headrefB = nullptr;
+  headrefA = curr;
+
+  return;
+
+}
+
+// Split a list.  If odd number of elements, then goes to the first list
+void frontBackSplit(Node* sourceref, Node* &frontref, Node* &backref)
+{
+
+  sourceref = frontref;
+  
+  // if source list is empty or if only has 1 node
+  if ( (sourceref == nullptr) || (sourceref->next == nullptr) )
+  {
+    backref = nullptr;
+    return;
+  }
+
+  // use slow and fast pointer to identify midpoint
+  Node* sptr = sourceref;
+  Node* fptr = sourceref;
+
+  while (fptr != nullptr)
+  {
+
+    fptr = fptr -> next;
+    
+    if (fptr != nullptr)
+    {
+      fptr = fptr -> next;
+      sptr = sptr -> next;
+    }
+    
+  }
+
+  backref = sptr -> next;
+  sptr -> next = nullptr;
+
+  return;
+  
+}
+
+// take 2 lists, removes from node from second list and pushes it onto front of the first
+void moveNode(Node* &aref, Node* bref)
+{
+  // edge case of b being empty
+  if (bref == nullptr)
+  {
+    return;
+  }
+
+  Node* dummy = bref->next;
+
+  bref->next = aref;
+  aref = bref;
+
+  bref = dummy;
+
+}
+
+// take 2 lists in sorted increasing order
+// and merge them into one sorted list
+Node* sortedMerge(Node* &aref, Node* &bref)
+{
+  Node dummy;
+  dummy.next = nullptr;
+  Node* tail = &dummy;
+
+  while (1)
+  {
+    // if a is empty
+    if (aref == nullptr)
+    {
+      tail->next = bref;
+      break;
+    }
+    else if (bref == nullptr)
+    {
+      tail->next = aref;
+      break;
+    }
+    // neither a nor b are empty
+    else
+    {
+      if (aref->data < bref->data)
+      {
+	moveNode(tail->next, aref);
+      }
+      else
+      {
+	moveNode(tail->next, bref);
+      }
+      tail = tail->next;
+    }
+      
+  } // end while
+
+  return dummy.next;
+}
+
 
 int main()
 {
