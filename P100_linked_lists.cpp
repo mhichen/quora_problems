@@ -261,7 +261,6 @@ void append(Node* &headrefA, Node* &headrefB)
 
   curr->next = headrefB;
   headrefB = nullptr;
-  headrefA = curr;
 
   return;
 
@@ -271,7 +270,7 @@ void append(Node* &headrefA, Node* &headrefB)
 void frontBackSplit(Node* sourceref, Node* &frontref, Node* &backref)
 {
 
-  sourceref = frontref;
+  frontref = sourceref;
   
   // if source list is empty or if only has 1 node
   if ( (sourceref == nullptr) || (sourceref->next == nullptr) )
@@ -305,7 +304,7 @@ void frontBackSplit(Node* sourceref, Node* &frontref, Node* &backref)
 }
 
 // take 2 lists, removes from node from second list and pushes it onto front of the first
-void moveNode(Node* &aref, Node* bref)
+void moveNode(Node* &aref, Node* &bref)
 {
   // edge case of b being empty
   if (bref == nullptr)
@@ -362,6 +361,19 @@ Node* sortedMerge(Node* &aref, Node* &bref)
   return dummy.next;
 }
 
+// given list, split into two smaller lists, recursively sort those lists
+// and merge two sorted lists back together
+
+// given two lists sorted in increasing order, create and return a new list representing
+// intersection of the two lists
+// new list should be made with its own memory, i.e. original lists should
+// not be changed.  This should be done with push() list building rather than moveNode.
+
+// iterative reverse function that reverses a list by rearranging
+// all the .next pointers and the head pointer
+
+// reverse recursive
+
 
 int main()
 {
@@ -380,19 +392,67 @@ int main()
 
   printList(list1);
 
-  std::cout << length(list1) << std::endl;
+  std::cout << "Length of list is " << length(list1) << std::endl;
 
-  std::cout << count(list1, 3) << std::endl;
-  std::cout << count(list1, 8) << std::endl;
+  std::cout << "Number of 3s " << count(list1, 3) << std::endl;
+  std::cout << "Number of 8s " << count(list1, 8) << std::endl;
 
-  std::cout << getNth(list1, 3) << std::endl;
-  //std::cout << getNth(list1, 8) << std::endl;
+  std::cout << "Getting 3rd element of list " << getNth(list1, 3) << std::endl;
 
-  std::cout << "Deleting list" << std::endl;
+  insertNth(list1, 3, 2);
+
+  std::cout << "Inserted 3 into the 2nd position" << std::endl;
+  
+  printList(list1);
+
+  Node* toInsert = newNode(7);
+ 
+  sortedInsert(list1, toInsert);
+
+  std::cout << "Inserted 7" << std::endl;
+
+  printList(list1);
+
+  
+  int values2[] = {8, 9, 10, 11, 12};
+
+  Node* list2 = createList(values2, 5);
+
+  printList(list2);
+
+  append(list1, list2);
+
+  printList(list1);
+
+  std::cout << "Spliting list into two" << std::endl;
+  
+  Node* front;
+  Node* back;
+  
+  frontBackSplit(list1, front, back);
+
+  printList(front);
+  printList(back);
+
+  std::cout << "Moved first node of back list to front of front list" << std::endl;
+  moveNode(front, back);
+  printList(front);
+  printList(back);
+
+  std::cout << "Popping out first element " << pop(front) << std::endl;
+  
+  //sortedMerge
+  Node* sortedList = sortedMerge(back, front);
+
+  printList(sortedList);
+  
+  std::cout << "Deleting list1" << std::endl;
   deleteList(list1);
 
+  std::cout << "Deleting sortedList" << std::endl;
+  deleteList(sortedList);
+  
   std::cout << length(list1) << std::endl;
+  std::cout << length(sortedList) << std::endl;
 
-  
-  
 }
