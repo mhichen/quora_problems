@@ -146,7 +146,7 @@ int getNth(Node* headref, int n)
   
 }
 
-// delete linked list
+// delete linked lists
 void deleteList(Node* &headref)
 {
   Node* curr = headref;
@@ -281,7 +281,7 @@ void frontBackSplit(Node* sourceref, Node* &frontref, Node* &backref)
 
   // use slow and fast pointer to identify midpoint
   Node* sptr = sourceref;
-  Node* fptr = sourceref;
+  Node* fptr = sourceref -> next;
 
   while (fptr != nullptr)
   {
@@ -296,7 +296,7 @@ void frontBackSplit(Node* sourceref, Node* &frontref, Node* &backref)
     
   }
 
-  backref = sptr -> next;
+  backref = sptr->next;
   sptr -> next = nullptr;
 
   return;
@@ -363,11 +363,72 @@ Node* sortedMerge(Node* &aref, Node* &bref)
 
 // given list, split into two smaller lists, recursively sort those lists
 // and merge two sorted lists back together
+void mergeSort(Node* &headref)
+{
+  Node* head = headref;
+  Node* left;
+  Node* right;
+
+  // base case of no more need to split
+  // 0 or 1 length
+  if ( (head == nullptr) || (head->next == nullptr) )
+  {
+    return;
+  }
+
+  // use frontBackSplit and sortedMerge
+  // split list into 2
+  frontBackSplit(head, left, right);
+  
+  mergeSort(left);
+  mergeSort(right);
+
+  headref = sortedMerge(left, right);
+  
+}
 
 // given two lists sorted in increasing order, create and return a new list representing
-// intersection of the two lists
-// new list should be made with its own memory, i.e. original lists should
-// not be changed.  This should be done with push() list building rather than moveNode.
+// intersection of the two lists new list should be made with its own memory,
+// i.e. original lists should not be changed.  This should be done with push()
+// list building rather than moveNode.
+// ignores duplicates
+Node* sortedIntersect(Node* refA, Node* refB)
+{
+
+  Node dummy;
+  dummy.next = nullptr;
+  Node* head = &dummy;
+  
+  //(Node* &headref, int data)
+
+  // keep iterating until either A or B is empty
+  while ( (refA != nullptr) && (refB != nullptr) )
+  {
+    // compare, 3 cases
+    // (1) equal
+    // (2) A > B -- advance B
+    // (3) A < B -- advance A
+    if (refA->data == refB->data)
+    {
+      push(head->next, refA->data);
+      head = head->next;
+      refA = refA -> next;
+      refB = refB -> next;
+    }
+    else if (refA->data > refB->data)
+    {
+      refB = refB->next;
+    }
+    else
+    {
+      refA = refA->next;
+    }
+  }
+  
+  return dummy.next;
+  
+}
+
 
 // iterative reverse function that reverses a list by rearranging
 // all the .next pointers and the head pointer
@@ -378,6 +439,11 @@ Node* sortedMerge(Node* &aref, Node* &bref)
 int main()
 {
 
+  // int values1[] = {1, 2, 3};
+  // Node* list1 = createList(values1, 3);
+  // printList(list1);
+  // deleteList(list1);
+  
   int values1[] = {1, 2, 3, 4, 5};
 
   Node* list1 = createList(values1, 5);
@@ -413,7 +479,6 @@ int main()
 
   printList(list1);
 
-  
   int values2[] = {8, 9, 10, 11, 12};
 
   Node* list2 = createList(values2, 5);
@@ -445,14 +510,72 @@ int main()
   Node* sortedList = sortedMerge(back, front);
 
   printList(sortedList);
-  
-  std::cout << "Deleting list1" << std::endl;
-  deleteList(list1);
 
   std::cout << "Deleting sortedList" << std::endl;
   deleteList(sortedList);
+
   
-  std::cout << length(list1) << std::endl;
-  std::cout << length(sortedList) << std::endl;
+  int values3[] = {4, 1, 2, 9, 5, 0, 3, 1, 10};
+
+  Node* list3 = createList(values3, 9);
+
+  printList(list3);
+
+  mergeSort(list3);
+
+  //printList(list3);
+
+  std::cout << "About to test out sortedIntersect" << std::endl;
+
+  //Testing sortedIntersect
+  int values4[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  for (int i = 0; i < 10; ++i)
+  {
+    std::cout << values4[i] << " ";
+    
+  }
+  std::cout << std::endl;
+  
+  Node* list4 = createList(values4, 10);
+
+  printList(list4);
+  
+  int values5[] = {2, 4, 6, 8, 10};
+  Node* list5 = createList(values5, 5);
+
+  printList(list5);
+  
+  Node* intersect = sortedIntersect(list4, list5);
+
+  printList(intersect);
+
+  // int values6[] = {1, 2};
+  // Node* list6 = createList(values6, 2);
+
+  // mergeSort(list6);
+
+  // deleteList(list6);
+  
+  // **************** Cleanup ****************
+  // std::cout << "Deleting list1" << std::endl;
+  // deleteList(list1);
+
+
+  // std::cout << "Deleting list2" << std::endl;
+  // deleteList(list2);
+
+  // deleteList(front);
+  // deleteList(back);
+
+  deleteList(list3);
+
+  deleteList(list4);
+  deleteList(list5);
+  deleteList(intersect);
+  
+  // std::cout << length(list1) << std::endl;
+  // std::cout << length(sortedList) << std::endl;
+  // std::cout << length(list2) << std::endl;
+
 
 }
