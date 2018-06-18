@@ -481,11 +481,6 @@ void reverse(Node* &headref)
 int main()
 {
 
-  // int values1[] = {1, 2, 3};
-  // Node* list1 = createList(values1, 3);
-  // printList(list1);
-  // deleteList(list1);
-  
   int values1[] = {1, 2, 3, 4, 5};
 
   Node* list1 = createList(values1, 5);
@@ -565,8 +560,6 @@ int main()
 
   mergeSort(list3);
 
-  //printList(list3);
-
   std::cout << "About to test out sortedIntersect" << std::endl;
 
   //Testing sortedIntersect
@@ -599,33 +592,9 @@ int main()
 
   printList(intersect);
   
-  // int values6[] = {1, 2};
-  // Node* list6 = createList(values6, 2);
-
-  // mergeSort(list6);
-
-  // deleteList(list6);
-  
-  // **************** Cleanup ****************
-  // std::cout << "Deleting list1" << std::endl;
-  // deleteList(list1);
-
-
-  // std::cout << "Deleting list2" << std::endl;
-  // deleteList(list2);
-
-  // deleteList(front);
-  // deleteList(back);
-
   deleteList(list3);
-
   deleteList(list4);
   deleteList(list5);
   deleteList(intersect);
-  
-  // std::cout << length(list1) << std::endl;
-  // std::cout << length(sortedList) << std::endl;
-  // std::cout << length(list2) << std::endl;
-
 
 }
