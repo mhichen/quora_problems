@@ -432,8 +432,50 @@ Node* sortedIntersect(Node* refA, Node* refB)
 
 // iterative reverse function that reverses a list by rearranging
 // all the .next pointers and the head pointer
+void reverse_list_iter(Node* &headref)
+{
+  Node* prev = nullptr;
+  Node* curr = headref;
+  Node* next;
+
+  while (curr != nullptr)
+  {
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+    //next = curr->next;
+  }
+
+  headref = prev;
+}
 
 // reverse recursive
+void reverse(Node* &headref)
+{
+  if (headref == nullptr)
+  {
+    return;
+  }
+
+  Node* first;
+  Node* rest;
+
+  first = headref;
+  rest = first->next;
+
+  if (rest == nullptr)
+  {
+    return;
+  }
+  
+  reverse(rest);
+
+  first->next->next = first;
+  first->next = nullptr;
+  
+  headref = rest;
+}
 
 
 int main()
@@ -549,6 +591,14 @@ int main()
 
   printList(intersect);
 
+  reverse_list_iter(intersect);
+
+  printList(intersect);
+
+  reverse(intersect);
+
+  printList(intersect);
+  
   // int values6[] = {1, 2};
   // Node* list6 = createList(values6, 2);
 
