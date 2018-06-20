@@ -29,7 +29,13 @@ def num_ways(denom, target):
             if j - denom[i - 1] < 0:
                 T[i][j] = T[i - 1][j]
                 
-            # include
+            # include:
+            # (1) Number of ways using this denomination, which involves
+            #     looking back to see how many ways there were with
+            #     (change - denomination), i.e. j - denom[i - 1] considering
+            #     the same set of denominations
+            # (2) Number of ways to get this same change, without even using
+            #     this denomination at all
             else:
                 T[i][j] = T[i][ j - denom[i - 1] ] + T[i - 1][j]
 
